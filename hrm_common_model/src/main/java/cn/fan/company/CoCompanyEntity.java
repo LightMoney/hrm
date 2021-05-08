@@ -1,14 +1,18 @@
 package cn.fan.company;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 /**
- * TODO
+ * jpa注解
+ *  映射表和实体类的关系（@Table）
+ *  字段和属性的映射（@Id   @column （如果字段对应可省略））
  *
  * @author HTHLKJ
  * @version 1.0
@@ -17,14 +21,15 @@ import java.util.Objects;
 @Data
 @Entity
 @Table(name = "co_company")
+//@AllArgsConstructor
 public class CoCompanyEntity implements Serializable {
     @Id
     private String id;
     private String name;
     private String managerId;
     private String version;
-    private Timestamp renewalDate;
-    private Timestamp expirationDate;
+    private Date renewalDate;
+    private Date expirationDate;
     private String companyArea;
     private String companyAddress;
     private String businessLicenseId;
@@ -35,8 +40,8 @@ public class CoCompanyEntity implements Serializable {
     private String industry;
     private String remarks;
     private String auditState;
-    private byte state;
-    private double balance;
-    private Timestamp createTime;
+    private Integer state;
+    private Double balance;
+    private Date createTime;
 
 }
