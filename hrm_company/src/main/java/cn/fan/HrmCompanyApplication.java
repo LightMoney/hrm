@@ -1,4 +1,4 @@
-package cn.fan.company;
+package cn.fan;
 
 import cn.fan.util.IdWorker;
 import org.springframework.boot.SpringApplication;
