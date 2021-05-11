@@ -1,6 +1,6 @@
 package cn.fan.company.dao;
 
-import cn.fan.company.CoCompanyEntity;
+import cn.fan.domain.company.CoCompanyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

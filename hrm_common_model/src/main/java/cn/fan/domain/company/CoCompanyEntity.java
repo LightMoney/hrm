@@ -1,4 +1,4 @@
-package cn.fan.company;
+package cn.fan.domain.company;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

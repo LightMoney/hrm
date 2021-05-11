@@ -1,15 +1,15 @@
 package cn.fan.dept.web;
 
-import cn.fan.company.CoCompanyEntity;
-import cn.fan.company.Department;
-import cn.fan.company.DeptListResult;
+import cn.fan.controller.BaseController;
+import cn.fan.domain.company.CoCompanyEntity;
+import cn.fan.domain.company.Department;
+import cn.fan.domain.company.DeptListResult;
 import cn.fan.company.service.CompanyService;
 import cn.fan.dept.service.DeptService;
 import cn.fan.entity.Result;
 import cn.fan.entity.ResultCode;
 import cn.fan.swagger.ano.ApiVersion;
 import cn.fan.swagger.interf.ApiVersionConstant;
-import cn.fan.util.OnlyIdUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.List;
 @Api("部门接口")
 @RestController
 @RequestMapping("/dept")
-public class DeptController {
+public class DeptController  {
     @Autowired
     private DeptService deptService;
 

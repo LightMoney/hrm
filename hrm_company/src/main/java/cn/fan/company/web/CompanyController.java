@@ -1,6 +1,6 @@
 package cn.fan.company.web;
 
-import cn.fan.company.CoCompanyEntity;
+import cn.fan.domain.company.CoCompanyEntity;
 import cn.fan.company.service.CompanyService;
 import cn.fan.entity.Result;
 import cn.fan.entity.ResultCode;

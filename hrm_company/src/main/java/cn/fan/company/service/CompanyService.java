@@ -1,15 +1,12 @@
 package cn.fan.company.service;
 
-import cn.fan.company.CoCompanyEntity;
+import cn.fan.domain.company.CoCompanyEntity;
 import cn.fan.company.dao.CompanyDao;
-import cn.fan.util.IdWorker;
 import cn.fan.util.OnlyIdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * TODO

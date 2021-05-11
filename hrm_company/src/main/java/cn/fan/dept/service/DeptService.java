@@ -1,18 +1,12 @@
 package cn.fan.dept.service;
 
-import cn.fan.company.Department;
+import cn.fan.domain.company.Department;
 import cn.fan.dept.dao.DeptDao;
 import cn.fan.service.BaseService;
 import cn.fan.util.OnlyIdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.validation.constraints.Max;
 import java.util.Date;
 import java.util.List;
 
