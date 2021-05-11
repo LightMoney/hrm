@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.validation.constraints.Max;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +31,7 @@ public class DeptService extends BaseService {
 
     public void addDept(Department department) {
         department.setId(OnlyIdUtil.generate("D"));
+        department.setCreateTime(new Date());
         Department save = deptDao.save(department);
     }
 

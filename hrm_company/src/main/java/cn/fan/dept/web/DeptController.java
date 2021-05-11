@@ -44,10 +44,11 @@ public class DeptController {
         return Result.SUCCESS();
     }
 
+//   使用delete  还是使用respbody  或@pathVariable   免得前端还要拼接路径参数
     @ApiVersion(group = ApiVersionConstant.FAP_APP100)
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{id}")
     @ApiOperation("通过部门id删除")
-    public Result delete(@RequestParam("id") String id) {
+    public Result delete(@PathVariable("id") String id) {
         deptService.delete(id);
         return Result.SUCCESS();
     }
