@@ -21,7 +21,7 @@ import java.util.List;
 @Api("部门接口")
 @RestController
 @RequestMapping("/dept")
-public class DeptController  {
+public class DeptController extends BaseController {
     @Autowired
     private DeptService deptService;
 
@@ -32,6 +32,8 @@ public class DeptController  {
     @ApiOperation("部门添加")
     @PostMapping("/add")
     public Result addDept(@RequestBody Department department) {
+        //暂时写死
+        department.setCompanyId(companyId);
         deptService.addDept(department);
         return Result.SUCCESS();
     }
@@ -44,7 +46,7 @@ public class DeptController  {
         return Result.SUCCESS();
     }
 
-//   使用delete  还是使用respbody  或@pathVariable   免得前端还要拼接路径参数
+    //   使用delete  还是使用respbody  或@pathVariable   免得前端还要拼接路径参数
     @ApiVersion(group = ApiVersionConstant.FAP_APP100)
     @DeleteMapping("/delete/{id}")
     @ApiOperation("通过部门id删除")
@@ -64,8 +66,8 @@ public class DeptController  {
     @ApiVersion(group = ApiVersionConstant.FAP_APP100)
     @GetMapping("/all")
     @ApiOperation("通过企业id查询部门列表")
-    public Result findAll(@RequestParam("companyId") String companyId) {
-
+    public Result findAll() {
+//companyId 暂时写死
         CoCompanyEntity one = companyService.findOne(companyId);
         List<Department> all = deptService.findAll(companyId);
         DeptListResult deptListResult = new DeptListResult(one, all);

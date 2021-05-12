@@ -12,4 +12,4 @@ spring:
     open-in-view: true
 
 server:
-  port: 900
+  port: 9002

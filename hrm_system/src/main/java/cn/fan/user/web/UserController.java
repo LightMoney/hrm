@@ -5,7 +5,11 @@ import cn.fan.domain.system.User;
 import cn.fan.entity.PageResult;
 import cn.fan.entity.Result;
 import cn.fan.entity.ResultCode;
+import cn.fan.swagger.ano.ApiVersion;
+import cn.fan.swagger.interf.ApiVersionConstant;
 import cn.fan.user.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-
+@Api("用户操作")
 @RestController
 @RequestMapping(value="/sys")
 public class UserController extends BaseController {
@@ -24,6 +28,8 @@ public class UserController extends BaseController {
     /**
      * 保存
      */
+    @ApiVersion(group = ApiVersionConstant.FAP_APP100)
+    @ApiOperation("用户保存")
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public Result save(@RequestBody User user) {
         //1.设置保存的企业id
@@ -35,10 +41,10 @@ public class UserController extends BaseController {
         return new Result(ResultCode.SUCCESS);
     }
 
-    /**
-     * 查询企业的部门列表
-     * 指定企业id
-     */
+
+
+    @ApiVersion(group = ApiVersionConstant.FAP_APP100)
+    @ApiOperation("根据企业查询用户")
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public Result findAll(int page, int size, @RequestParam Map map) {
         //1.获取当前的企业id
@@ -53,6 +59,8 @@ public class UserController extends BaseController {
     /**
      * 根据ID查询user
      */
+    @ApiVersion(group = ApiVersionConstant.FAP_APP100)
+    @ApiOperation("根据id查询用户")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public Result findById(@PathVariable(value = "id") String id) {
         User user = userService.findById(id);
@@ -62,6 +70,8 @@ public class UserController extends BaseController {
     /**
      * 修改User
      */
+    @ApiVersion(group = ApiVersionConstant.FAP_APP100)
+    @ApiOperation("用户修改")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
     public Result update(@PathVariable(value = "id") String id, @RequestBody User user) {
         //1.设置修改的部门id
@@ -74,6 +84,8 @@ public class UserController extends BaseController {
     /**
      * 根据id删除
      */
+    @ApiVersion(group = ApiVersionConstant.FAP_APP100)
+    @ApiOperation("删除用户")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
     public Result delete(@PathVariable(value = "id") String id) {
         userService.deleteById(id);

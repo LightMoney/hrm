@@ -11,7 +11,7 @@
  Target Server Version : 80022
  File Encoding         : 65001
 
- Date: 11/05/2021 17:48:37
+ Date: 12/05/2021 17:38:08
 */
 
 SET NAMES utf8mb4;
@@ -23,20 +23,20 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `bs_user`;
 CREATE TABLE `bs_user`  (
   `id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'ID',
-  `mobile` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '手机号码',
-  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户名称',
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '密码',
-  `enable_state` int NULL DEFAULT 1 COMMENT '启用状态 0是禁用，1是启用',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `department_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门ID',
-  `time_of_entry` datetime(0) NULL DEFAULT NULL COMMENT '入职时间',
-  `form_of_employment` int NULL DEFAULT NULL COMMENT '聘用形式',
-  `work_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '工号',
-  `form_of_management` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '管理形式',
-  `working_city` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '工作城市',
-  `correction_time` datetime(0) NULL DEFAULT NULL COMMENT '转正时间',
-  `in_service_status` int NULL DEFAULT NULL COMMENT '在职状态 1.在职 2.离职',
-  `company_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '企业ID',
+  `mobile` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '?ֻ????',
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '?û??',
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '???',
+  `enable_state` int NULL DEFAULT 1 COMMENT '????״̬ 0?ǽ??ã?1???',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '????ʱ?',
+  `department_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '????ID',
+  `time_of_entry` datetime(0) NULL DEFAULT NULL COMMENT '??ְʱ?',
+  `form_of_employment` int NULL DEFAULT NULL COMMENT 'Ƹ????ʽ',
+  `work_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '???',
+  `form_of_management` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '??????ʽ',
+  `working_city` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '???????',
+  `correction_time` datetime(0) NULL DEFAULT NULL COMMENT 'ת??ʱ?',
+  `in_service_status` int NULL DEFAULT NULL COMMENT '??ְ״̬ 1.??ְ  2.??ְ',
+  `company_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '??ҵID',
   `company_name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `department_name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
@@ -46,6 +46,7 @@ CREATE TABLE `bs_user`  (
 -- ----------------------------
 -- Records of bs_user
 -- ----------------------------
+INSERT INTO `bs_user` VALUES ('U1392394062715011072', '12654545', 'colin', '123456', 1, NULL, '5', '2021-05-04 08:00:00', 1, '12306', NULL, NULL, '2021-05-25 00:00:00', NULL, '1', '光源科技', '营销');
 
 -- ----------------------------
 -- Table structure for co_company
@@ -106,5 +107,143 @@ INSERT INTO `co_department` VALUES ('4', '1', '1', '销售2', 'xs2', NULL, NULL,
 INSERT INTO `co_department` VALUES ('5', '1', '3', '营销', 'yx', NULL, NULL, NULL, NULL, '2021-05-11 11:12:36', NULL);
 INSERT INTO `co_department` VALUES ('D1391998312076091392', '1', '1', '销售3', 'xs3', NULL, NULL, NULL, '测试', '2021-05-11 14:07:14', '小芳');
 INSERT INTO `co_department` VALUES ('D1392022760581861376', '1', '5', 'rrry', 'h', NULL, NULL, NULL, NULL, '2021-05-11 15:44:23', 'h');
+
+-- ----------------------------
+-- Table structure for pe_permission
+-- ----------------------------
+DROP TABLE IF EXISTS `pe_permission`;
+CREATE TABLE `pe_permission`  (
+  `id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '?',
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT 'Ȩ?????',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'Ȩ???',
+  `type` tinyint NULL DEFAULT NULL COMMENT 'Ȩ?????? 1Ϊ?˵? 2Ϊ???? 3ΪAPI',
+  `pid` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '?',
+  `code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `en_visible` int NULL DEFAULT NULL COMMENT '??ҵ?ɼ??? 0?????ɼ???1???ɼ',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of pe_permission
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for pe_permission_api
+-- ----------------------------
+DROP TABLE IF EXISTS `pe_permission_api`;
+CREATE TABLE `pe_permission_api`  (
+  `id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '???',
+  `api_level` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'Ȩ?޵ȼ???1Ϊͨ?ýӿ?Ȩ?ޣ?2Ϊ??У???ӿ?Ȩ?',
+  `api_method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '???????',
+  `api_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '???',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of pe_permission_api
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for pe_permission_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `pe_permission_menu`;
+CREATE TABLE `pe_permission_menu`  (
+  `id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '???',
+  `menu_icon` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'Ȩ?޴',
+  `menu_order` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of pe_permission_menu
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for pe_permission_point
+-- ----------------------------
+DROP TABLE IF EXISTS `pe_permission_point`;
+CREATE TABLE `pe_permission_point`  (
+  `id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '???',
+  `point_class` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '??ť???',
+  `point_icon` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '??ťicon',
+  `point_status` int NULL DEFAULT NULL COMMENT '״̬',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of pe_permission_point
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for pe_role
+-- ----------------------------
+DROP TABLE IF EXISTS `pe_role`;
+CREATE TABLE `pe_role`  (
+  `id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '???',
+  `name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '??ɫ?',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '˵?',
+  `company_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '??ҵid',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `UK_k3beff7qglfn58qsf2yvbg41i`(`name`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of pe_role
+-- ----------------------------
+INSERT INTO `pe_role` VALUES ('R1392394153974677504', '系统管理员', '系统管理', '1');
+
+-- ----------------------------
+-- Table structure for pe_role_permission
+-- ----------------------------
+DROP TABLE IF EXISTS `pe_role_permission`;
+CREATE TABLE `pe_role_permission`  (
+  `role_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '??ɫID',
+  `permission_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Ȩ??ID',
+  PRIMARY KEY (`role_id`, `permission_id`) USING BTREE,
+  INDEX `FK74qx7rkbtq2wqms78gljv87a0`(`permission_id`) USING BTREE,
+  INDEX `FKee9dk0vg99shvsytflym6egxd`(`role_id`) USING BTREE,
+  CONSTRAINT `FK_Reference_3` FOREIGN KEY (`role_id`) REFERENCES `pe_role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_Reference_4` FOREIGN KEY (`permission_id`) REFERENCES `pe_permission` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of pe_role_permission
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for pe_user_role
+-- ----------------------------
+DROP TABLE IF EXISTS `pe_user_role`;
+CREATE TABLE `pe_user_role`  (
+  `role_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '??ɫID',
+  `user_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'Ȩ??ID',
+  PRIMARY KEY (`role_id`, `user_id`) USING BTREE,
+  INDEX `FK74qx7rkbtq2wqms78gljv87a1`(`role_id`) USING BTREE,
+  INDEX `FKee9dk0vg99shvsytflym6egx1`(`user_id`) USING BTREE,
+  CONSTRAINT `FK_Reference_1` FOREIGN KEY (`user_id`) REFERENCES `bs_user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_Reference_2` FOREIGN KEY (`role_id`) REFERENCES `pe_role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of pe_user_role
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sys_file
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_file`;
+CREATE TABLE `sys_file`  (
+  `id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'id',
+  `file_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '?ļ?ԭʼ?',
+  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '?洢·??',
+  `uuid_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '?ļ?ʵ???',
+  `type` tinyint NULL DEFAULT NULL COMMENT '?ļ????',
+  `create_time` datetime(0) NOT NULL COMMENT '????ʱ?',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_file
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;
