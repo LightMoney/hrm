@@ -2,6 +2,7 @@ package cn.fan.user.web;
 
 import cn.fan.controller.BaseController;
 import cn.fan.domain.system.User;
+import cn.fan.domain.system.response.UserResult;
 import cn.fan.entity.PageResult;
 import cn.fan.entity.Result;
 import cn.fan.entity.ResultCode;
@@ -15,15 +16,26 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.List;
 import java.util.Map;
 
 @Api("用户操作")
 @RestController
-@RequestMapping(value="/sys")
+@RequestMapping(value = "/sys")
 public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @ApiVersion(group = ApiVersionConstant.FAP_APP100)
+    @ApiOperation("用户分配角色")
+    @RequestMapping(value = "/user/assignRoles", method = RequestMethod.PUT)
+    public Result assignRoles(@RequestBody Map<String, Object> map) {
+        String id = (String) map.get("id");
+        List<String> roleIds = (List<String>) map.get("roleIds");
+        userService.assignRoles(id, roleIds);
+        return Result.SUCCESS();
+    }
 
     /**
      * 保存
@@ -42,17 +54,16 @@ public class UserController extends BaseController {
     }
 
 
-
     @ApiVersion(group = ApiVersionConstant.FAP_APP100)
     @ApiOperation("根据企业查询用户")
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public Result findAll(int page, int size, @RequestParam Map map) {
         //1.获取当前的企业id
-        map.put("companyId",companyId);
+        map.put("companyId", companyId);
         //2.完成查询
-        Page<User> pageUser = userService.findAll(map,page,size);
+        Page<User> pageUser = userService.findAll(map, page, size);
         //3.构造返回结果
-        PageResult pageResult = new PageResult(pageUser.getTotalElements(),pageUser.getContent());
+        PageResult pageResult = new PageResult(pageUser.getTotalElements(), pageUser.getContent());
         return new Result(ResultCode.SUCCESS, pageResult);
     }
 
@@ -64,7 +75,8 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public Result findById(@PathVariable(value = "id") String id) {
         User user = userService.findById(id);
-        return new Result(ResultCode.SUCCESS, user);
+        UserResult userResult = new UserResult(user);
+        return new Result(ResultCode.SUCCESS, userResult);
     }
 
     /**

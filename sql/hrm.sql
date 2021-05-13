@@ -11,7 +11,7 @@
  Target Server Version : 80022
  File Encoding         : 65001
 
- Date: 13/05/2021 15:26:07
+ Date: 13/05/2021 17:55:30
 */
 
 SET NAMES utf8mb4;
@@ -46,6 +46,7 @@ CREATE TABLE `bs_user`  (
 -- ----------------------------
 -- Records of bs_user
 -- ----------------------------
+INSERT INTO `bs_user` VALUES ('U1392765360640917504', '130000000000', '张三', '123456', 1, NULL, '5', '2021-05-11 08:00:00', 1, '6544', NULL, NULL, '2021-05-18 00:00:00', NULL, '1', '光源科技', '营销');
 
 -- ----------------------------
 -- Table structure for co_company
@@ -125,6 +126,7 @@ CREATE TABLE `pe_permission`  (
 -- ----------------------------
 -- Records of pe_permission
 -- ----------------------------
+INSERT INTO `pe_permission` VALUES ('P1392777118873071616', NULL, 'Saas企业管理', 1, '0', 'saas-clients', 1);
 
 -- ----------------------------
 -- Table structure for pe_permission_api
@@ -156,6 +158,7 @@ CREATE TABLE `pe_permission_menu`  (
 -- ----------------------------
 -- Records of pe_permission_menu
 -- ----------------------------
+INSERT INTO `pe_permission_menu` VALUES ('P1392777118873071616', NULL, '1');
 
 -- ----------------------------
 -- Table structure for pe_permission_point
@@ -189,6 +192,9 @@ CREATE TABLE `pe_role`  (
 -- ----------------------------
 -- Records of pe_role
 -- ----------------------------
+INSERT INTO `pe_role` VALUES ('R1392769581637468160', '系统管理员', NULL, '1');
+INSERT INTO `pe_role` VALUES ('R1392769612767592448', '部门经理', NULL, '1');
+INSERT INTO `pe_role` VALUES ('R1392769691796668416', '财务总监', NULL, '1');
 
 -- ----------------------------
 -- Table structure for pe_role_permission
@@ -207,6 +213,7 @@ CREATE TABLE `pe_role_permission`  (
 -- ----------------------------
 -- Records of pe_role_permission
 -- ----------------------------
+INSERT INTO `pe_role_permission` VALUES ('R1392769581637468160', 'P1392777118873071616');
 
 -- ----------------------------
 -- Table structure for pe_user_role
@@ -225,6 +232,7 @@ CREATE TABLE `pe_user_role`  (
 -- ----------------------------
 -- Records of pe_user_role
 -- ----------------------------
+INSERT INTO `pe_user_role` VALUES ('R1392769581637468160', 'U1392765360640917504');
 
 -- ----------------------------
 -- Table structure for sys_file

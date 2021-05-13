@@ -1,7 +1,9 @@
 package cn.fan.user.service;
 
 
+import cn.fan.domain.system.Role;
 import cn.fan.domain.system.User;
+import cn.fan.user.dao.RoleDao;
 import cn.fan.user.dao.UserDao;
 import cn.fan.util.IdWorker;
 import cn.fan.util.OnlyIdUtil;
@@ -17,15 +19,16 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.lang.annotation.Target;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private RoleDao roleDao;
 
 
     /**
@@ -109,5 +112,22 @@ public class UserService {
      */
     public void deleteById(String id) {
         userDao.deleteById(id);
+    }
+
+
+    /**
+     * 分配角色
+     */
+
+    public void assignRoles(String userId, List<String> roleIds) {
+        User user = userDao.findById(userId).get();
+        Set<Role> roles = new HashSet<>();
+        for (String roleId : roleIds) {
+            Role role = roleDao.findById(roleId).get();
+            roles.add(role);
+        }
+        user.setRoles(roles);
+        userDao.save(user);
+
     }
 }
