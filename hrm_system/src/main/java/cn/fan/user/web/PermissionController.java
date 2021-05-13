@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 //1.解决跨域
-@CrossOrigin
+//@CrossOrigin
 //2.声明restContoller
 @RestController
 //3.设置父路径
