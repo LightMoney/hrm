@@ -54,4 +54,18 @@ public class JwtUtils {
         return claims;
     }
 
+
+//    public static void main(String[] args) {
+//        JwtBuilder jwtBuilder = Jwts.builder().setId("22").setSubject("光源")
+//                .setIssuedAt(new Date())
+//                .signWith(SignatureAlgorithm.HS256, "colin")
+//                .claim("companyId","554");//自定义信息
+//        String token = jwtBuilder.compact();
+//        System.out.println(token);
+
+//        Claims colin = Jwts.parser().setSigningKey("colin").parseClaimsJws("eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyMiIsInN1YiI6IuWFiea6kCIsImlhdCI6MTYyMDk3NDk1NCwiY29tcGFueUlkIjoiNTU0In0.sYFvb4dw1DRLWxOUJcpjmbCGljg8obDLKSdTuQ1GfCo").getBody();
+//        String id = colin.getId();
+//        Object companyId = colin.get("companyId");
+//        System.out.println(id+":"+companyId);
+//    }
 }

@@ -12,6 +12,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+
+/**
+ *登录后返回的用户信息
+ */
 @Setter
 @Getter
 public class ProfileResult {

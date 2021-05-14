@@ -2,30 +2,85 @@ package cn.fan.user.web;
 
 import cn.fan.controller.BaseController;
 import cn.fan.domain.system.User;
+import cn.fan.domain.system.response.ProfileResult;
 import cn.fan.domain.system.response.UserResult;
 import cn.fan.entity.PageResult;
 import cn.fan.entity.Result;
 import cn.fan.entity.ResultCode;
+import cn.fan.exception.CommonException;
 import cn.fan.swagger.ano.ApiVersion;
 import cn.fan.swagger.interf.ApiVersionConstant;
 import cn.fan.user.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import cn.fan.util.JwtUtils;
+import io.jsonwebtoken.Claims;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Api("用户操作")
+@Api(tags = "用户操作")
 @RestController
 @RequestMapping(value = "/sys")
 public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    /**
+     * login
+     *
+     * @param
+     * @return
+     */
+    @ApiVersion(group = ApiVersionConstant.FAP_APP100)
+    @ApiOperation("登录")
+    @ApiImplicitParam(name = "loginMap",value = "{\n" +
+            "\t\"mobile\":\"1572508943000\",\n" +
+            "\t\"password\":\"1572462143000\"\n"+
+            "}",dataType = "map",paramType = "body")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public Result login(@RequestBody Map<String, String> loginMap) {
+        String mobile = loginMap.get("mobile");
+        String password = loginMap.get("password");
+        User user = userService.findByMobile(mobile);
+        if (user == null || !user.getPassword().equals(password)) {
+            return new Result(ResultCode.MOBILE_ERROR);
+        } else {
+            HashMap<String, Object> map = new HashMap<>(2);
+            map.put("companyId", user.getCompanyId());
+            map.put("companyName", user.getCompanyName());
+            String token = jwtUtils.createJwt(user.getId(), user.getUsername(), map);
+            return new Result(ResultCode.SUCCESS, token);
+        }
+
+    }
+
+    @ApiVersion(group = ApiVersionConstant.FAP_APP100)
+    @ApiOperation("登陆后返回相应的用户信息接口")
+    @RequestMapping(value = "/profile", method = RequestMethod.POST)
+    public Result profile() throws CommonException {
+
+        String authorization = request.getHeader("Authorization");
+        if (StringUtils.isEmpty(authorization)){
+            throw  new CommonException(ResultCode.UNAUTHENTICATED);
+        }
+//        Bearer+" " 开头的
+        String token = authorization.substring(7);
+        Claims claims = jwtUtils.parseJwt(token);
+        String id = claims.getId();
+        User user = userService.findById(id);
+        ProfileResult profileResult = new ProfileResult(user);
+        return new Result(ResultCode.SUCCESS, profileResult);
+    }
 
     @ApiVersion(group = ApiVersionConstant.FAP_APP100)
     @ApiOperation("用户分配角色")
