@@ -46,7 +46,7 @@ public class Permission implements Serializable {
      *      菜单   api权限
      *      按钮    api权限
      */
-    private String pid;
+    private String parentId;
 
     private Integer enVisible;
 

@@ -11,7 +11,7 @@
  Target Server Version : 80022
  File Encoding         : 65001
 
- Date: 17/05/2021 15:25:45
+ Date: 17/05/2021 17:57:05
 */
 
 SET NAMES utf8mb4;
@@ -49,6 +49,7 @@ CREATE TABLE `bs_user`  (
 -- ----------------------------
 INSERT INTO `bs_user` VALUES ('U1392765360640917504', '13038133516', 'colin', '123456', 1, NULL, '5', '2021-05-11 08:00:00', 1, '6544', NULL, 'CD', '2021-05-18 00:00:00', NULL, '1', '光源科技', '营销', 'saasAdmin');
 INSERT INTO `bs_user` VALUES ('U1392765360640917874', '13000000000', 'fan', '123456', 1, NULL, '5', '2021-05-11 08:00:00', 1, '6544', NULL, 'CD', '2021-05-18 00:00:00', NULL, '1', '光源科技', '营销', 'coAdmin');
+INSERT INTO `bs_user` VALUES ('U1392765360640917884', '13000000001', 'fgy', '123456', 1, NULL, '5', '2021-05-11 08:00:00', 1, '6544', NULL, 'CD', '2021-05-18 00:00:00', NULL, '1', '光源科技', '营销', 'user');
 
 -- ----------------------------
 -- Table structure for co_company
@@ -119,7 +120,7 @@ CREATE TABLE `pe_permission`  (
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '权限描述',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '权限名称',
   `type` tinyint NULL DEFAULT NULL COMMENT '权限类型 1为菜单 2为功能 3为API',
-  `pid` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '主键',
+  `parent_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '主键',
   `code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `en_visible` int NULL DEFAULT NULL COMMENT '企业可见性 0：不可见，1：可见',
   PRIMARY KEY (`id`) USING BTREE
@@ -128,7 +129,13 @@ CREATE TABLE `pe_permission`  (
 -- ----------------------------
 -- Records of pe_permission
 -- ----------------------------
-INSERT INTO `pe_permission` VALUES ('P1392777118873071616', NULL, 'Saas企业管理', 1, '0', 'saas-clients', 1);
+INSERT INTO `pe_permission` VALUES ('P1392777118873071616', NULL, 'Saas企业管理', 1, '0', 'saas-clients', 0);
+INSERT INTO `pe_permission` VALUES ('P1394205148048801792', NULL, '组织管理', 1, '0', 'departments', 1);
+INSERT INTO `pe_permission` VALUES ('P1394205469349265408', NULL, '员工管理', 1, '0', 'employees', 1);
+INSERT INTO `pe_permission` VALUES ('P1394205759095980032', NULL, '公司设置', 1, '0', 'settings', 1);
+INSERT INTO `pe_permission` VALUES ('P1394205903430369280', NULL, '权限管理', 1, '0', 'permissions', 1);
+INSERT INTO `pe_permission` VALUES ('P1394209818767015936', NULL, '用户删除按钮', 2, 'P1394205469349265408', 'point-user-delete', 1);
+INSERT INTO `pe_permission` VALUES ('P1394220277125664768', NULL, '用户添加', 2, 'P1394205469349265408', 'point-user-save', 1);
 
 -- ----------------------------
 -- Table structure for pe_permission_api
@@ -161,6 +168,10 @@ CREATE TABLE `pe_permission_menu`  (
 -- Records of pe_permission_menu
 -- ----------------------------
 INSERT INTO `pe_permission_menu` VALUES ('P1392777118873071616', NULL, '1');
+INSERT INTO `pe_permission_menu` VALUES ('P1394205148048801792', '22', '2');
+INSERT INTO `pe_permission_menu` VALUES ('P1394205469349265408', '33', '3');
+INSERT INTO `pe_permission_menu` VALUES ('P1394205759095980032', '55', '5');
+INSERT INTO `pe_permission_menu` VALUES ('P1394205903430369280', '66', '6');
 
 -- ----------------------------
 -- Table structure for pe_permission_point
@@ -177,6 +188,9 @@ CREATE TABLE `pe_permission_point`  (
 -- ----------------------------
 -- Records of pe_permission_point
 -- ----------------------------
+INSERT INTO `pe_permission_point` VALUES ('P1394209818767015936', 'xxx', 'xxx', 1);
+INSERT INTO `pe_permission_point` VALUES ('P1394218781772402688', '33', '33', 333);
+INSERT INTO `pe_permission_point` VALUES ('P1394220277125664768', '33', '33', 33);
 
 -- ----------------------------
 -- Table structure for pe_role
@@ -216,6 +230,9 @@ CREATE TABLE `pe_role_permission`  (
 -- Records of pe_role_permission
 -- ----------------------------
 INSERT INTO `pe_role_permission` VALUES ('R1392769581637468160', 'P1392777118873071616');
+INSERT INTO `pe_role_permission` VALUES ('R1392769612767592448', 'P1394205469349265408');
+INSERT INTO `pe_role_permission` VALUES ('R1392769612767592448', 'P1394209818767015936');
+INSERT INTO `pe_role_permission` VALUES ('R1392769612767592448', 'P1394220277125664768');
 
 -- ----------------------------
 -- Table structure for pe_user_role
@@ -235,6 +252,7 @@ CREATE TABLE `pe_user_role`  (
 -- Records of pe_user_role
 -- ----------------------------
 INSERT INTO `pe_user_role` VALUES ('R1392769581637468160', 'U1392765360640917504');
+INSERT INTO `pe_user_role` VALUES ('R1392769612767592448', 'U1392765360640917884');
 
 -- ----------------------------
 -- Table structure for sys_file

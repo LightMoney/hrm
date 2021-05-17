@@ -146,7 +146,7 @@ public class PermissionService {
         map.put("type",perm.getType());
         map.put("code",perm.getCode());
         map.put("description",perm.getDescription());
-        map.put("pid",perm.getPid());
+        map.put("pid",perm.getParentId());
         map.put("enVisible",perm.getEnVisible());
 
 
@@ -171,7 +171,7 @@ public class PermissionService {
                 List<Predicate> list = new ArrayList<>();
                 //根据父id查询
                 if(!StringUtils.isEmpty(map.get("pid"))) {
-                    list.add(criteriaBuilder.equal(root.get("pid").as(String.class),(String)map.get("pid")));
+                    list.add(criteriaBuilder.equal(root.get("parentId").as(String.class),(String)map.get("pid")));
                 }
                 //根据enVisible查询
                 if(!StringUtils.isEmpty(map.get("enVisible"))) {

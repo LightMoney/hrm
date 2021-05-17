@@ -46,7 +46,7 @@ public class RoleService extends BaseService {
         for (String permId : permIds) {
             Permission permission = permissionDao.findById(permId).get();
             //需要根据父id和类型查询API权限列表
-            List<Permission> apiList = permissionDao.findByTypeAndPid(PermissionConstants.PERMISSION_API, permission.getId());
+            List<Permission> apiList = permissionDao.findByTypeAndParentId(PermissionConstants.PERMISSION_API, permission.getId());
             perms.addAll(apiList);//自定赋予API权限
             perms.add(permission);//当前菜单或按钮的权限
         }
