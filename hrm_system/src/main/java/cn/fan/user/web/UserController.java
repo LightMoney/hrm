@@ -1,6 +1,7 @@
 package cn.fan.user.web;
 
 import cn.fan.controller.BaseController;
+import cn.fan.domain.system.Permission;
 import cn.fan.domain.system.User;
 import cn.fan.domain.system.response.ProfileResult;
 import cn.fan.domain.system.response.UserResult;
@@ -10,6 +11,7 @@ import cn.fan.entity.ResultCode;
 import cn.fan.exception.CommonException;
 import cn.fan.swagger.ano.ApiVersion;
 import cn.fan.swagger.interf.ApiVersionConstant;
+import cn.fan.user.service.PermissionService;
 import cn.fan.user.service.UserService;
 import cn.fan.util.JwtUtils;
 import io.jsonwebtoken.Claims;
@@ -33,6 +35,9 @@ public class UserController extends BaseController {
     private UserService userService;
 
     @Autowired
+    private PermissionService permissionService;
+
+    @Autowired
     private JwtUtils jwtUtils;
 
     /**
@@ -43,10 +48,10 @@ public class UserController extends BaseController {
      */
     @ApiVersion(group = ApiVersionConstant.FAP_APP100)
     @ApiOperation("登录")
-    @ApiImplicitParam(name = "loginMap",value = "{\n" +
+    @ApiImplicitParam(name = "loginMap", value = "{\n" +
             "\t\"mobile\":\"1572508943000\",\n" +
-            "\t\"password\":\"1572462143000\"\n"+
-            "}",dataType = "map",paramType = "body")
+            "\t\"password\":\"1572462143000\"\n" +
+            "}", dataType = "map", paramType = "body")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result login(@RequestBody Map<String, String> loginMap) {
         String mobile = loginMap.get("mobile");
@@ -70,15 +75,28 @@ public class UserController extends BaseController {
     public Result profile() throws CommonException {
 
         String authorization = request.getHeader("Authorization");
-        if (StringUtils.isEmpty(authorization)){
-            throw  new CommonException(ResultCode.UNAUTHENTICATED);
+        if (StringUtils.isEmpty(authorization)) {
+            throw new CommonException(ResultCode.UNAUTHENTICATED);
         }
 //        Bearer+" " 开头的
         String token = authorization.substring(7);
         Claims claims = jwtUtils.parseJwt(token);
         String id = claims.getId();
         User user = userService.findById(id);
-        ProfileResult profileResult = new ProfileResult(user);
+        ProfileResult profileResult = null;
+        //saas管理员具有所有权限
+        //企业管理员具有企业所有权限
+        //企业普通用户具有当前角色权限
+        if ("user".equals(user.getLevel())) {
+            profileResult = new ProfileResult(user);
+        } else {
+            HashMap<String, Object> map = new HashMap<>();
+            if ("coAdmin".equals(user.getLevel())) {
+                map.put("enVisible", "1");
+            }
+            List<Permission> all = permissionService.findAll(map);
+            profileResult = new ProfileResult(user, all);
+        }
         return new Result(ResultCode.SUCCESS, profileResult);
     }
 

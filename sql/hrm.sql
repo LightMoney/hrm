@@ -11,7 +11,7 @@
  Target Server Version : 80022
  File Encoding         : 65001
 
- Date: 13/05/2021 17:55:30
+ Date: 17/05/2021 15:25:45
 */
 
 SET NAMES utf8mb4;
@@ -39,6 +39,7 @@ CREATE TABLE `bs_user`  (
   `company_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '企业ID',
   `company_name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `department_name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `level` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户级别',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_user_phone`(`mobile`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
@@ -46,7 +47,8 @@ CREATE TABLE `bs_user`  (
 -- ----------------------------
 -- Records of bs_user
 -- ----------------------------
-INSERT INTO `bs_user` VALUES ('U1392765360640917504', '130000000000', '张三', '123456', 1, NULL, '5', '2021-05-11 08:00:00', 1, '6544', NULL, NULL, '2021-05-18 00:00:00', NULL, '1', '光源科技', '营销');
+INSERT INTO `bs_user` VALUES ('U1392765360640917504', '13038133516', 'colin', '123456', 1, NULL, '5', '2021-05-11 08:00:00', 1, '6544', NULL, 'CD', '2021-05-18 00:00:00', NULL, '1', '光源科技', '营销', 'saasAdmin');
+INSERT INTO `bs_user` VALUES ('U1392765360640917874', '13000000000', 'fan', '123456', 1, NULL, '5', '2021-05-11 08:00:00', 1, '6544', NULL, 'CD', '2021-05-18 00:00:00', NULL, '1', '光源科技', '营销', 'coAdmin');
 
 -- ----------------------------
 -- Table structure for co_company

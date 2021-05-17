@@ -91,6 +91,12 @@ public class User implements Serializable {
     private Integer inServiceStatus;
 
     private String departmentName;
+    /**
+     * saasAdmin: saas有所有权限
+     * coAdmin:企业管理员（创建租户时创建）
+     * user: 普通用户需要分配角色
+     */
+    private  String level;
 
     /**
      * @JsonIgnore 忽略转换为json  避免多对多对象中转换的死循环
