@@ -2,6 +2,7 @@ package cn.fan.user.web;
 
 import cn.fan.controller.BaseController;
 import cn.fan.domain.system.Permission;
+import cn.fan.domain.system.Role;
 import cn.fan.domain.system.User;
 import cn.fan.domain.system.response.ProfileResult;
 import cn.fan.domain.system.response.UserResult;
@@ -14,6 +15,7 @@ import cn.fan.swagger.interf.ApiVersionConstant;
 import cn.fan.user.service.PermissionService;
 import cn.fan.user.service.UserService;
 import cn.fan.util.JwtUtils;
+import cn.fan.util.PermissionConstants;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Api(tags = "用户操作")
 @RestController
@@ -60,7 +63,18 @@ public class UserController extends BaseController {
         if (user == null || !user.getPassword().equals(password)) {
             return new Result(ResultCode.MOBILE_ERROR);
         } else {
-            HashMap<String, Object> map = new HashMap<>(2);
+            //登录成功  获取api权限字
+            StringBuilder sb = new StringBuilder();
+            for (Role role : user.getRoles()) {
+                Set<Permission> permissions = role.getPermissions();
+                for (Permission p : permissions) {
+                    if (p.getType() == PermissionConstants.PERMISSION_API) {
+                        sb.append(p.getCode()).append(",");
+                    }
+                }
+            }
+            HashMap<String, Object> map = new HashMap<>(3);
+            map.put("apis", sb.toString());
             map.put("companyId", user.getCompanyId());
             map.put("companyName", user.getCompanyName());
             String token = jwtUtils.createJwt(user.getId(), user.getUsername(), map);
@@ -74,13 +88,13 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/profile", method = RequestMethod.POST)
     public Result profile() throws CommonException {
 
-        String authorization = request.getHeader("Authorization");
-        if (StringUtils.isEmpty(authorization)) {
-            throw new CommonException(ResultCode.UNAUTHENTICATED);
-        }
-//        Bearer+" " 开头的
-        String token = authorization.substring(7);
-        Claims claims = jwtUtils.parseJwt(token);
+//        String authorization = request.getHeader("Authorization");
+//        if (StringUtils.isEmpty(authorization)) {
+//            throw new CommonException(ResultCode.UNAUTHENTICATED);
+//        }
+////        Bearer+" " 开头的
+//        String token = authorization.substring(7);
+//        Claims claims = jwtUtils.parseJwt(token);
         String id = claims.getId();
         User user = userService.findById(id);
         ProfileResult profileResult = null;
@@ -171,7 +185,7 @@ public class UserController extends BaseController {
      */
     @ApiVersion(group = ApiVersionConstant.FAP_APP100)
     @ApiOperation("删除用户")
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE,name = "api-user-delete")
     public Result delete(@PathVariable(value = "id") String id) {
         userService.deleteById(id);
         return new Result(ResultCode.SUCCESS);

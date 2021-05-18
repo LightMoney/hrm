@@ -1,5 +1,6 @@
 package cn.fan.controller;
 
+import io.jsonwebtoken.Claims;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,17 +12,19 @@ public class BaseController {
     protected HttpServletResponse response;
     protected String companyId;
     protected String companyName;
+    protected Claims claims;
 
     @ModelAttribute
-    public void setResAnReq(HttpServletRequest request,HttpServletResponse response) {
+    public void setResAnReq(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
-        /**
-         * 目前使用 companyId = 1
-         *         companyName = "光源科技"
-         */
-        this.companyId = "1";
-        this.companyName = "光源科技";
+
+        Object user_claims = request.getAttribute("user_claims");
+        if (user_claims!=null){
+            this.claims=(Claims)user_claims;
+            this.companyId = (String) claims.get("companyId");
+            this.companyName =(String)claims.get("companyName");
+        }
     }
 
 }
