@@ -2,4 +2,6 @@
 
 全局的跨域请求
 
-公共的拦截器 拦截解析token  还需要在项目中配置  实现WebMvcConfigurationSupport的配置类中配置
+公共的拦截器 拦截解析token  还需要在项目中配置  实现WebMvcConfigurationSupport的配置类中配置  config目录下
+
+BaseExceptionHandler  自定义异常拦截处理器   转换为对应的result返回给前端

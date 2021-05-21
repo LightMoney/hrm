@@ -38,7 +38,6 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
             String token = authorization.substring(7);
             Claims claims = jwtUtils.parseJwt(token);
             if (claims != null) {
-
                 String apis = (String) claims.get("apis");
                 //给用户操作接口 带上name属性 为数据库中code相同
                 HandlerMethod method = (HandlerMethod) handler;

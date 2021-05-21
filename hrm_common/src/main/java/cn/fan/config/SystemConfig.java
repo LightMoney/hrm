@@ -1,4 +1,4 @@
-package cn.fan.user.config;
+package cn.fan.config;
 
 
 import cn.fan.interceptor.JwtInterceptor;
