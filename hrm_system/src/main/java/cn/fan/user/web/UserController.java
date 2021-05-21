@@ -18,12 +18,18 @@ import cn.fan.util.JwtUtils;
 import cn.fan.util.PermissionConstants;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.*;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,30 +62,42 @@ public class UserController extends BaseController {
             "\t\"password\":\"1572462143000\"\n" +
             "}", dataType = "map", paramType = "body")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Result login(@RequestBody Map<String, String> loginMap) {
+    public Result login(@RequestBody Map<String, String> loginMap) throws CommonException {
         String mobile = loginMap.get("mobile");
         String password = loginMap.get("password");
-        User user = userService.findByMobile(mobile);
-        if (user == null || !user.getPassword().equals(password)) {
-            return new Result(ResultCode.MOBILE_ERROR);
-        } else {
-            //登录成功  获取api权限字
-            StringBuilder sb = new StringBuilder();
-            for (Role role : user.getRoles()) {
-                Set<Permission> permissions = role.getPermissions();
-                for (Permission p : permissions) {
-                    if (p.getType() == PermissionConstants.PERMISSION_API) {
-                        sb.append(p.getCode()).append(",");
-                    }
-                }
-            }
-            HashMap<String, Object> map = new HashMap<>(3);
-            map.put("apis", sb.toString());
-            map.put("companyId", user.getCompanyId());
-            map.put("companyName", user.getCompanyName());
-            String token = jwtUtils.createJwt(user.getId(), user.getUsername(), map);
-            return new Result(ResultCode.SUCCESS, token);
+        try {
+//            String s = new Md5Hash(password, mobile, 3).toString();//加密后可使用
+            UsernamePasswordToken token = new UsernamePasswordToken(mobile, password);
+            Subject subject = SecurityUtils.getSubject();
+            subject.login(token);
+            String sessionId = (String) subject.getSession().getId();
+            return new Result(ResultCode.SUCCESS, sessionId);
+        } catch (Exception e) {
+            throw new CommonException(ResultCode.UNAUTHENTICATED);
         }
+
+
+//        User user = userService.findByMobile(mobile);
+//        if (user == null || !user.getPassword().equals(password)) {
+//            return new Result(ResultCode.MOBILE_ERROR);
+//        } else {
+//            //登录成功  获取api权限字
+//            StringBuilder sb = new StringBuilder();
+//            for (Role role : user.getRoles()) {
+//                Set<Permission> permissions = role.getPermissions();
+//                for (Permission p : permissions) {
+//                    if (p.getType() == PermissionConstants.PERMISSION_API) {
+//                        sb.append(p.getCode()).append(",");
+//                    }
+//                }
+//            }
+//            HashMap<String, Object> map = new HashMap<>(3);
+//            map.put("apis", sb.toString());
+//            map.put("companyId", user.getCompanyId());
+//            map.put("companyName", user.getCompanyName());
+//            String token = jwtUtils.createJwt(user.getId(), user.getUsername(), map);
+//            return new Result(ResultCode.SUCCESS, token);
+//        }
 
     }
 
@@ -87,31 +105,33 @@ public class UserController extends BaseController {
     @ApiOperation("登陆后返回相应的用户信息接口")
     @RequestMapping(value = "/profile", method = RequestMethod.POST)
     public Result profile() throws CommonException {
+        //获取session中的安全数据
+        Subject subject = SecurityUtils.getSubject();
+        //1.subject获取所有的安全数据集合
+        PrincipalCollection principals = subject.getPrincipals();
+        //2.获取安全数据
+        ProfileResult result = (ProfileResult)principals.getPrimaryPrincipal();
 
-//        String authorization = request.getHeader("Authorization");
-//        if (StringUtils.isEmpty(authorization)) {
-//            throw new CommonException(ResultCode.UNAUTHENTICATED);
+///        String id = claims.getId();
+//        User user = userService.findById(id);
+//        ProfileResult profileResult = null;
+//        //saas管理员具有所有权限
+//        //企业管理员具有企业所有权限
+//        //企业普通用户具有当前角色权限
+//        if ("user".equals(user.getLevel())) {
+//            profileResult = new ProfileResult(user);
+//        } else {
+//            HashMap<String, Object> map = new HashMap<>();
+//            if ("coAdmin".equals(user.getLevel())) {
+//                map.put("enVisible", "1");
+//            }
+//            List<Permission> all = permissionService.findAll(map);
+//            profileResult = new ProfileResult(user, all);
 //        }
-////        Bearer+" " 开头的
-//        String token = authorization.substring(7);
-//        Claims claims = jwtUtils.parseJwt(token);
-        String id = claims.getId();
-        User user = userService.findById(id);
-        ProfileResult profileResult = null;
-        //saas管理员具有所有权限
-        //企业管理员具有企业所有权限
-        //企业普通用户具有当前角色权限
-        if ("user".equals(user.getLevel())) {
-            profileResult = new ProfileResult(user);
-        } else {
-            HashMap<String, Object> map = new HashMap<>();
-            if ("coAdmin".equals(user.getLevel())) {
-                map.put("enVisible", "1");
-            }
-            List<Permission> all = permissionService.findAll(map);
-            profileResult = new ProfileResult(user, all);
-        }
-        return new Result(ResultCode.SUCCESS, profileResult);
+//        return new Result(ResultCode.SUCCESS, profileResult);
+        return new Result(ResultCode.SUCCESS,result);
+
+
     }
 
     @ApiVersion(group = ApiVersionConstant.FAP_APP100)
@@ -185,7 +205,7 @@ public class UserController extends BaseController {
      */
     @ApiVersion(group = ApiVersionConstant.FAP_APP100)
     @ApiOperation("删除用户")
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE,name = "api-user-delete")
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE, name = "api-user-delete")
     public Result delete(@PathVariable(value = "id") String id) {
         userService.deleteById(id);
         return new Result(ResultCode.SUCCESS);

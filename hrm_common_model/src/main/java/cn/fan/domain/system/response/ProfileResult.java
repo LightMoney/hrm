@@ -6,7 +6,9 @@ import cn.fan.domain.system.User;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.crazycake.shiro.AuthCachePrincipal;
 
+import java.io.Serializable;
 import java.util.*;
 
 
@@ -15,10 +17,11 @@ import java.util.*;
  */
 @Setter
 @Getter
-public class ProfileResult {
+public class ProfileResult implements Serializable, AuthCachePrincipal {
     private String mobile;
     private String username;
     private String company;
+    private String companyId;
     private Map<String, Object> roles = new HashMap<>();
 
 
@@ -26,6 +29,7 @@ public class ProfileResult {
         this.mobile = user.getMobile();
         this.username = user.getUsername();
         this.company = user.getCompanyName();
+        this.companyId = user.getCompanyId();
         Set<String> menus = new HashSet<>();
         Set<String> points = new HashSet<>();
         Set<String> apis = new HashSet<>();
@@ -71,5 +75,11 @@ public class ProfileResult {
         this.roles.put("menus", menus);
         this.roles.put("points", points);
         this.roles.put("apis", apis);
+    }
+
+    //定义存储在redis中的数据信息key，不写有默认值
+    @Override
+    public String getAuthCacheKey() {
+        return null;
     }
 }

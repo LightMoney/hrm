@@ -7,6 +7,7 @@ import cn.fan.user.dao.RoleDao;
 import cn.fan.user.dao.UserDao;
 import cn.fan.util.IdWorker;
 import cn.fan.util.OnlyIdUtil;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,7 +32,7 @@ public class UserService {
     private RoleDao roleDao;
 
 
-    public User findByMobile(String mobile){
+    public User findByMobile(String mobile) {
         return userDao.findByMobile(mobile);
     }
 
@@ -39,6 +40,7 @@ public class UserService {
      * 1.保存用户
      */
     public void save(User user) {
+//        String s = new Md5Hash("12345", user.getMobile(), 3).toString();//添加密码应加密
         //设置初始密码
         user.setPassword("123456");
         user.setEnableState(1);
