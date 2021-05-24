@@ -23,6 +23,7 @@ import java.lang.invoke.MethodHandle;
  * postHandle 执行完控制器方法之后
  * <p>
  * token拦截
+ * 单独shiro时就不使用了
  */
 @Component
 public class JwtInterceptor extends HandlerInterceptorAdapter {

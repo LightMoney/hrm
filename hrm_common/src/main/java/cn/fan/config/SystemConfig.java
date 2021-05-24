@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-
-@Configuration
+//注释掉jwt的拦截解析  避免影响shiro单元测试
+//@Configuration
 public class SystemConfig extends WebMvcConfigurationSupport {
 
     @Autowired

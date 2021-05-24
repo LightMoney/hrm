@@ -17,7 +17,7 @@ public class BaseController {
     protected String companyId;
     protected String companyName;
     protected Claims claims;
-
+//使用jwt获取
 //    @ModelAttribute
 //    public void setResAnReq(HttpServletRequest request, HttpServletResponse response) {
 //        this.request = request;

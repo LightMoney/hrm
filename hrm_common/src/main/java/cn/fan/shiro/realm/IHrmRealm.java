@@ -39,7 +39,7 @@ public class IHrmRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
 //获取安全数据
         ProfileResult primaryPrincipal = (ProfileResult) principalCollection.getPrimaryPrincipal();
-//        获取权限信息
+//        获取权限信息(api接口权限标识)
         Set<String> apisPerm = (Set<String>)primaryPrincipal.getRoles().get("apis");
 //        构造返回
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();

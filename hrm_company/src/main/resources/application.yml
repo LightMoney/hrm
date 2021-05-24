@@ -10,9 +10,12 @@ spring:
     database: MySQL
     show-sql: true
     open-in-view: true
-
+  redis:
+    host: 127.0.0.1
+    port: 6379
 server:
   port: 9001
+#  jwt解析配置
 jwt:
   config:
     ttl: 3600000

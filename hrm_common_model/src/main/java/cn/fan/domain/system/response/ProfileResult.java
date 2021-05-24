@@ -53,7 +53,7 @@ public class ProfileResult implements Serializable, AuthCachePrincipal {
         this.mobile = user.getMobile();
         this.username = user.getUsername();
         this.company = user.getCompanyName();
-
+        this.companyId = user.getCompanyId();
         Set<Role> roles = user.getRoles();
         Set<String> menus = new HashSet<>();
         Set<String> points = new HashSet<>();

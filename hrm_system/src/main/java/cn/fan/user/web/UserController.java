@@ -20,6 +20,7 @@ import io.jsonwebtoken.Claims;
 import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
@@ -73,7 +74,7 @@ public class UserController extends BaseController {
             String sessionId = (String) subject.getSession().getId();
             return new Result(ResultCode.SUCCESS, sessionId);
         } catch (Exception e) {
-            throw new CommonException(ResultCode.UNAUTHENTICATED);
+            throw new CommonException(ResultCode.MOBILE_ERROR);
         }
 
 
@@ -203,9 +204,11 @@ public class UserController extends BaseController {
     /**
      * 根据id删除
      */
+    @RequiresPermissions("api-user-delete")
     @ApiVersion(group = ApiVersionConstant.FAP_APP100)
     @ApiOperation("删除用户")
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE, name = "api-user-delete")
+//    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE, name = "api-user-delete")
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
     public Result delete(@PathVariable(value = "id") String id) {
         userService.deleteById(id);
         return new Result(ResultCode.SUCCESS);
