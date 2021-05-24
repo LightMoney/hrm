@@ -43,6 +43,8 @@ public class UserService {
         user.setPassword("123456");
         user.setEnableState(1);
         user.setId(OnlyIdUtil.generate("U"));
+        //        设置用户等级  默认是普通用户user     coAdmin企业管理员    saasAdmin平台管理员
+        user.setLevel("user");
         //调用dao保存部门
         userDao.save(user);
     }
