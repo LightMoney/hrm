@@ -4,10 +4,11 @@ import cn.fan.util.JwtUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 
-
+@EnableDiscoveryClient
 @SpringBootApplication(scanBasePackages = "cn.fan")
 @EntityScan("cn.fan.domain.system")
 public class SystemApplication {

@@ -1,6 +1,12 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8083/eureka/
+server:
+  port: 9003
 spring:
   application:
-    name: hrm-system
+    name: ihrm-employee #指定服务名
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/hrm?useUnicode=true&characterEncoding=utf8
@@ -13,18 +19,4 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
-server:
-  port: 9002
-jwt:
-  config:
-    ttl: 3600000
-    key: colin
-eureka:
-  instance:
-    #在eureka中显示ip地址
-    prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}
-  client:
-    service-url:
-      defaultZone: http://localhost:8083/eureka/
 
