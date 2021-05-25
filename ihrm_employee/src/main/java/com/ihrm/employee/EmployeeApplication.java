@@ -1,6 +1,7 @@
 package com.ihrm.employee;
 
 import cn.fan.util.IdWorker;
+import cn.fan.util.JwtUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -16,5 +17,8 @@ public class EmployeeApplication {
         SpringApplication.run(EmployeeApplication.class, args);
     }
 
-
+    @Bean
+    public JwtUtils jwtUtils() {
+        return new JwtUtils();
+    }
 }

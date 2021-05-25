@@ -12,6 +12,7 @@ import cn.fan.entity.ResultCode;
 import cn.fan.exception.CommonException;
 import cn.fan.swagger.ano.ApiVersion;
 import cn.fan.swagger.interf.ApiVersionConstant;
+import cn.fan.user.client.DepatmentFeign;
 import cn.fan.user.service.PermissionService;
 import cn.fan.user.service.UserService;
 import cn.fan.util.JwtUtils;
@@ -49,6 +50,19 @@ public class UserController extends BaseController {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private DepatmentFeign depatmentFeign;
+
+    /**
+     * 测试feign
+     */
+    @ApiVersion(group = ApiVersionConstant.FAP_APP100)
+    @ApiOperation("测试")
+    @GetMapping("/test")
+    public Result testFeign() {
+        return depatmentFeign.findAll();
+    }
 
     /**
      * login
@@ -111,7 +125,7 @@ public class UserController extends BaseController {
         //1.subject获取所有的安全数据集合
         PrincipalCollection principals = subject.getPrincipals();
         //2.获取安全数据
-        ProfileResult result = (ProfileResult)principals.getPrimaryPrincipal();
+        ProfileResult result = (ProfileResult) principals.getPrimaryPrincipal();
 
 ///        String id = claims.getId();
 //        User user = userService.findById(id);
@@ -130,7 +144,7 @@ public class UserController extends BaseController {
 //            profileResult = new ProfileResult(user, all);
 //        }
 //        return new Result(ResultCode.SUCCESS, profileResult);
-        return new Result(ResultCode.SUCCESS,result);
+        return new Result(ResultCode.SUCCESS, result);
 
 
     }
