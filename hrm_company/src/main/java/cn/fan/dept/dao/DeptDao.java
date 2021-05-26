@@ -14,4 +14,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface DeptDao extends JpaRepository<Department, String>, JpaSpecificationExecutor<Department> {
+    public Department findByCodeAndAndCompanyId(String code, String companyId);
 }

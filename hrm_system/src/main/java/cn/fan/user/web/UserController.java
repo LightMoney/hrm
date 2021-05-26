@@ -19,6 +19,8 @@ import cn.fan.util.JwtUtils;
 import cn.fan.util.PermissionConstants;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.*;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -29,13 +31,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Api(tags = "用户操作")
 @RestController
@@ -226,5 +226,58 @@ public class UserController extends BaseController {
     public Result delete(@PathVariable(value = "id") String id) {
         userService.deleteById(id);
         return new Result(ResultCode.SUCCESS);
+    }
+
+    @RequestMapping(value = "/user/import", method = RequestMethod.POST)
+    public Result importDatas(@RequestParam(name = "file") MultipartFile attachment) throws Exception {
+        Workbook wb = new XSSFWorkbook(attachment.getInputStream());
+        //2.获取Sheet
+        Sheet sheet = wb.getSheetAt(0);//参数：索引
+        //3.获取Sheet中的每一行，和每一个单元格
+        ArrayList<User> users = new ArrayList<>();
+        for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
+            Row row = sheet.getRow(rowNum);//根据索引获取每一个行
+            ArrayList<Object> objects = new ArrayList<>();
+            for (int cellNum = 1; cellNum < row.getLastCellNum(); cellNum++) {
+                //根据索引获取每一个单元格
+                Cell cell = row.getCell(cellNum);
+                //获取每一个单元格的内容
+                Object value = getCellValue(cell);
+                objects.add(value);
+            }
+            users.add(new User(objects));
+        }
+        userService.saveAll(users,companyId,companyName);
+        return new Result(ResultCode.SUCCESS);
+    }
+
+    public static Object getCellValue(Cell cell) {
+        //1.获取到单元格的属性类型
+        CellType cellType = cell.getCellType();
+        //2.根据单元格数据类型获取数据
+        Object value = null;
+        switch (cellType) {
+            case STRING:
+                value = cell.getStringCellValue();
+                break;
+            case BOOLEAN:
+                value = cell.getBooleanCellValue();
+                break;
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    //日期格式
+                    value = cell.getDateCellValue();
+                } else {
+                    //数字
+                    value = cell.getNumericCellValue();
+                }
+                break;
+            case FORMULA: //公式
+                value = cell.getCellFormula();
+                break;
+            default:
+                break;
+        }
+        return value;
     }
 }

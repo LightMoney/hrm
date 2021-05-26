@@ -1,18 +1,13 @@
 package com.ihrm.employee.service;
 
-
+import cn.fan.domain.employee.EmployeeTransferPosition;
 import com.ihrm.employee.dao.TransferPositionDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import cn.fan.domain.employee.EmployeeTransferPosition;
+
 import java.util.Date;
 
-/**
- * Created with IDEA
- * Author:xzengsf
- * Date:2018/10/22 10:57
- * Description:
- */
+
 @Service
 public class TransferPositionService {
     @Autowired

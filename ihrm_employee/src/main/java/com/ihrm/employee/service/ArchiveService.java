@@ -35,7 +35,7 @@ public class ArchiveService extends BaseService {
 
 
     public void save(EmployeeArchive archive) {
-        archive.setId(OnlyIdUtil.generate("E"));
+        archive.setId(OnlyIdUtil.generate(""));
         archive.setCreateTime(new Date());
         archiveDao.save(archive);
     }

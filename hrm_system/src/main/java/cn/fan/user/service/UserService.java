@@ -1,8 +1,10 @@
 package cn.fan.user.service;
 
 
+import cn.fan.domain.company.Department;
 import cn.fan.domain.system.Role;
 import cn.fan.domain.system.User;
+import cn.fan.user.client.DepatmentFeign;
 import cn.fan.user.dao.RoleDao;
 import cn.fan.user.dao.UserDao;
 import cn.fan.util.IdWorker;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -31,9 +34,29 @@ public class UserService {
     @Autowired
     private RoleDao roleDao;
 
+    @Autowired
+    private DepatmentFeign feign;
 
     public User findByMobile(String mobile) {
         return userDao.findByMobile(mobile);
+    }
+
+    @Transactional
+    public void saveAll(List<User> users, String companyId, String companyName) {
+        for (User user : users) {
+            user.setId(OnlyIdUtil.generate("U"));
+            user.setCompanyId(companyId);
+            user.setCompanyName(companyName);
+            user.setEnableState(1);
+            user.setInServiceStatus(1);
+            user.setLevel("user");
+            user.setPassword("123456");//这里没加密哦
+            Department deptByCode = feign.findDeptByCode(user.getDepartmentId(), companyId);
+            if (deptByCode != null) {
+
+            }
+            userDao.save(user);
+        }
     }
 
     /**

@@ -23,6 +23,11 @@ public class DeptService extends BaseService {
     @Autowired
     private DeptDao deptDao;
 
+
+    public Department findDeptByCode(String code, String companyId) {
+        return deptDao.findByCodeAndAndCompanyId(code, companyId);
+    }
+
     public void addDept(Department department) {
         department.setId(OnlyIdUtil.generate("D"));
         department.setCreateTime(new Date());

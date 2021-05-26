@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -19,6 +20,16 @@ import java.util.Set;
 @Setter
 public class User implements Serializable {
     private static final long serialVersionUID = 4297464181093070302L;
+
+    public User(List list) {
+        this.username = (String) list.get(0);
+        this.mobile = (String) list.get(1);
+        this.workNumber = list.get(2).toString();
+        this.formOfEmployment = ((Double) list.get(3)).intValue();
+        this.timeOfEntry = (Date) list.get(4);
+        this.departmentId = (String) list.get(5);
+    }
+
     /**
      * ID
      */
@@ -96,7 +107,7 @@ public class User implements Serializable {
      * coAdmin:企业管理员（创建租户时创建）
      * user: 普通用户需要分配角色
      */
-    private  String level;
+    private String level;
 
     /**
      * @JsonIgnore 忽略转换为json  避免多对多对象中转换的死循环
@@ -107,4 +118,7 @@ public class User implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
     private Set<Role> roles = new HashSet<Role>();//用户与角色   多对多
+
+    public User() {
+    }
 }

@@ -73,4 +73,9 @@ public class DeptController extends BaseController {
         DeptListResult deptListResult = new DeptListResult(one, all);
         return new Result(ResultCode.SUCCESS, deptListResult);
     }
+
+    @PostMapping("/code")
+    public Department findDeptByCode(@RequestParam("code") String deptCode, @RequestParam("companyId") String companyId) {
+        return deptService.findDeptByCode(deptCode, companyId);
+    }
 }
