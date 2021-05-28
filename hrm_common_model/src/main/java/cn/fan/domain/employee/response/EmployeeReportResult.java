@@ -3,6 +3,7 @@ package cn.fan.domain.employee.response;
 
 import cn.fan.domain.employee.EmployeeResignation;
 import cn.fan.domain.employee.UserCompanyPersonal;
+import cn.fan.domain.employee.response.anno.ExcelAttribute;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,10 +17,10 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @ToString
 public class EmployeeReportResult {
-
-//    @ExcelAttribute(sort = 0)
+// @ExcelAttribute自定义注解  实现基于poi的模板导出导入 指定列  类似
+    @ExcelAttribute(sort = 0)
     private String userId;
-//    @ExcelAttribute(sort = 1)
+    @ExcelAttribute(sort = 1)
     private String username;
     private String departmentName;
     private String mobile;

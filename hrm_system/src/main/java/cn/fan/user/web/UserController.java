@@ -13,10 +13,13 @@ import cn.fan.exception.CommonException;
 import cn.fan.swagger.ano.ApiVersion;
 import cn.fan.swagger.interf.ApiVersionConstant;
 import cn.fan.user.client.DepatmentFeign;
+import cn.fan.user.easypoi.UserDataListener;
 import cn.fan.user.service.PermissionService;
 import cn.fan.user.service.UserService;
+import cn.fan.user.theard.ImportTaskExcutor;
 import cn.fan.util.JwtUtils;
 import cn.fan.util.PermissionConstants;
+import com.alibaba.excel.EasyExcel;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.*;
 import org.apache.poi.ss.usermodel.*;
@@ -29,6 +32,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.util.StopWatch;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,6 +57,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private DepatmentFeign depatmentFeign;
+
+    @Autowired
+    private ImportTaskExcutor importTaskExcutor;
 
     /**
      * 测试feign
@@ -230,30 +237,38 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/user/import", method = RequestMethod.POST)
     public Result importDatas(@RequestParam(name = "file") MultipartFile attachment) throws Exception {
-        Workbook wb = new XSSFWorkbook(attachment.getInputStream());
-        //2.获取Sheet
-        Sheet sheet = wb.getSheetAt(0);//参数：索引
-        //3.获取Sheet中的每一行，和每一个单元格
-        ArrayList<User> users = new ArrayList<>();
-        for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
-            Row row = sheet.getRow(rowNum);//根据索引获取每一个行
-            ArrayList<Object> objects = new ArrayList<>();
-            for (int cellNum = 1; cellNum < row.getLastCellNum(); cellNum++) {
-                //根据索引获取每一个单元格
-                Cell cell = row.getCell(cellNum);
-                //获取每一个单元格的内容
-                Object value = getCellValue(cell);
-                objects.add(value);
-            }
-            users.add(new User(objects));
-        }
-        userService.saveAll(users,companyId,companyName);
+        StopWatch watch = new StopWatch();
+
+        watch.start();
+//        Workbook wb = new XSSFWorkbook(attachment.getInputStream());
+//        //2.获取Sheet
+//        Sheet sheet = wb.getSheetAt(0);//参数：索引
+//        //3.获取Sheet中的每一行，和每一个单元格
+//        ArrayList<User> users = new ArrayList<>();
+//        for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
+//            Row row = sheet.getRow(rowNum);//根据索引获取每一个行
+//            ArrayList<Object> objects = new ArrayList<>();
+//            for (int cellNum = 1; cellNum < row.getLastCellNum(); cellNum++) {
+//                //根据索引获取每一个单元格
+//                Cell cell = row.getCell(cellNum);
+//                //获取每一个单元格的内容
+//                Object value = getCellValue(cell);
+//                objects.add(value);
+//            }
+//            users.add(new User(objects));
+//        }
+//        userService.saveAll(users, companyId, companyName);
+        UserDataListener<User> userUserDataListener = new UserDataListener<User>( importTaskExcutor);
+        EasyExcel.read(attachment.getInputStream(), User.class, userUserDataListener).sheet().doRead();
+        watch.stop();
+        System.out.println(watch.getTotalTimeSeconds());
         return new Result(ResultCode.SUCCESS);
     }
 
     public static Object getCellValue(Cell cell) {
         //1.获取到单元格的属性类型
-        CellType cellType = cell.getCellType();
+//        poi 4.0  getCellType()
+        CellType cellType = cell.getCellTypeEnum();
         //2.根据单元格数据类型获取数据
         Object value = null;
         switch (cellType) {

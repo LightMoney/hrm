@@ -53,7 +53,8 @@ public class UserService {
             user.setPassword("123456");//这里没加密哦
             Department deptByCode = feign.findDeptByCode(user.getDepartmentId(), companyId);
             if (deptByCode != null) {
-
+                user.setDepartmentId(deptByCode.getId());
+                user.setDepartmentName(deptByCode.getName());
             }
             userDao.save(user);
         }

@@ -1,5 +1,6 @@
 package cn.fan.domain.system;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,10 +39,12 @@ public class User implements Serializable {
     /**
      * 手机号码
      */
+    @ExcelProperty(index = 2)
     private String mobile;
     /**
      * 用户名称
      */
+    @ExcelProperty(index = 1)
     private String username;
     /**
      * 密码
@@ -64,21 +67,25 @@ public class User implements Serializable {
     /**
      * 部门ID
      */
+    @ExcelProperty(index = 6)
     private String departmentId;
 
     /**
      * 入职时间
      */
+    @ExcelProperty(index = 5)
     private Date timeOfEntry;
 
     /**
      * 聘用形式
      */
+    @ExcelProperty(index = 4)
     private Integer formOfEmployment;
 
     /**
      * 工号
      */
+    @ExcelProperty(index = 3)
     private String workNumber;
 
     /**

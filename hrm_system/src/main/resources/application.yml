@@ -13,12 +13,21 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
+  servlet:
+    multipart:
+      max-request-size: 30MB
+      max-file-size: 30MB
 server:
   port: 9002
 jwt:
   config:
     ttl: 3600000
     key: colin
+
+    #单个文件数据大小限制
+#    spring.http.multipart.maxFileSize = 20Mb
+#    #每次上传总数据大小限制
+#    spring.http.multipart.maxRequestSize=100Mb
 eureka:
   instance:
     #在eureka中显示ip地址

@@ -1,6 +1,8 @@
 package cn.fan.controller;
 
+import cn.fan.copy.PrincipalThreadlocal;
 import cn.fan.domain.system.response.ProfileResult;
+
 import io.jsonwebtoken.Claims;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 
 public class BaseController {
 
@@ -17,7 +20,8 @@ public class BaseController {
     protected String companyId;
     protected String companyName;
     protected Claims claims;
-//使用jwt获取
+
+    //使用jwt获取
 //    @ModelAttribute
 //    public void setResAnReq(HttpServletRequest request, HttpServletResponse response) {
 //        this.request = request;
@@ -32,7 +36,7 @@ public class BaseController {
 //    }
     //使用shiro获取
     @ModelAttribute
-    public void setResAnReq(HttpServletRequest request,HttpServletResponse response) {
+    public void setResAnReq(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
 
@@ -40,11 +44,16 @@ public class BaseController {
         Subject subject = SecurityUtils.getSubject();
         //1.subject获取所有的安全数据集合
         PrincipalCollection principals = subject.getPrincipals();
-        if(principals != null && !principals.isEmpty()){
+        if (principals != null && !principals.isEmpty()) {
             //2.获取安全数据
-            ProfileResult result = (ProfileResult)principals.getPrimaryPrincipal();
+            ProfileResult result = (ProfileResult) principals.getPrimaryPrincipal();
             this.companyId = result.getCompanyId();
             this.companyName = result.getCompany();
+            HashMap<Object, Object> map = new HashMap<>();
+            map.put("companyId", this.companyId);
+            map.put("companyName", this.companyName);
+            PrincipalThreadlocal.setContent(map);
+
         }
     }
 }

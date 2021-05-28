@@ -10,10 +10,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 public class DownloadUtils {
-    public void download(ByteArrayOutputStream byteArrayOutputStream, HttpServletResponse response, String returnName) throws IOException {
+    public void download(ByteArrayOutputStream byteArrayOutputStream, HttpServletResponse response, String fileName) throws IOException {
+        fileName = URLEncoder.encode(fileName, "UTF-8");
         response.setContentType("application/octet-stream");
-        returnName = response.encodeURL(new String(returnName.getBytes(),"iso8859-1"));			//保存的文件名,必须和页面编码一致,否则乱码
-        response.addHeader("content-disposition","attachment;filename=" + returnName);
+        response.setHeader("content-disposition", "attachment;filename=" + new String(fileName.getBytes("ISO8859-1")));
+        response.setHeader("filename", fileName);
         response.setContentLength(byteArrayOutputStream.size());
         ServletOutputStream outputstream = response.getOutputStream();	//取得输出流
         byteArrayOutputStream.writeTo(outputstream);					//写到输出流
