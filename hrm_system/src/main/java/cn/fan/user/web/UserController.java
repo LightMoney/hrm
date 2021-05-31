@@ -7,6 +7,7 @@ import cn.fan.domain.system.Role;
 import cn.fan.domain.system.User;
 import cn.fan.domain.system.response.ProfileResult;
 import cn.fan.domain.system.response.UserResult;
+import cn.fan.domain.system.response.UserSimpleResult;
 import cn.fan.entity.PageResult;
 import cn.fan.entity.Result;
 import cn.fan.entity.ResultCode;
@@ -39,6 +40,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -71,6 +73,18 @@ public class UserController extends BaseController {
     public Result testFeign() {
         return depatmentFeign.findAll();
     }
+
+
+    @ApiVersion(group = ApiVersionConstant.FAP_APP100)
+    @ApiOperation("员工图片上传")
+    @RequestMapping("/user/upload/{id}")
+    public Result upload(@PathVariable String id, @RequestParam(name = "file") MultipartFile file) throws IOException {
+        //1.调用service保存图片（获取到图片的访问地址（dataUrl | http地址））
+        String imgUrl = userService.uploadImage(id, file);
+        //2.返回数据
+        return new Result(ResultCode.SUCCESS, imgUrl);
+    }
+
 
     /**
      * login
@@ -281,11 +295,12 @@ public class UserController extends BaseController {
                 end = size;
             }
             List<User> users = templates.subList(start, end);
-            importTaskExcutor.doTaskTest( users,companyId,companyName);
+            importTaskExcutor.doTaskTest(users, companyId, companyName);
             start = end;
             end = start + 1000;
         }
     }
+
     public static Object getCellValue(Cell cell) {
         //1.获取到单元格的属性类型
 //        poi 4.0  getCellType()
@@ -315,5 +330,15 @@ public class UserController extends BaseController {
                 break;
         }
         return value;
+    }
+
+    @RequestMapping(value = "/user/simple", method = RequestMethod.GET)
+    public Result simple() throws Exception {
+        List<UserSimpleResult> list = new ArrayList<>();
+        List<User> users = userService.findAll(companyId);
+        for (User user : users) {
+            list.add(new UserSimpleResult(user.getId(),user.getUsername()));
+        }
+        return new Result(ResultCode.SUCCESS,list);
     }
 }

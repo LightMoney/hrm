@@ -8,7 +8,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
- * TODO
+ * 抽取的公共条件
  *
  * @author HTHLKJ
  * @version 1.0

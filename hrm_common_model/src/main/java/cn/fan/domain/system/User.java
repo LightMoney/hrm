@@ -22,14 +22,14 @@ import java.util.Set;
 public class User implements Serializable {
     private static final long serialVersionUID = 4297464181093070302L;
 
-    public User(List list) {
-        this.username = (String) list.get(0);
-        this.mobile = (String) list.get(1);
-        this.workNumber = list.get(2).toString();
-        this.formOfEmployment = ((Double) list.get(3)).intValue();
-        this.timeOfEntry = (Date) list.get(4);
-        this.departmentId = (String) list.get(5);
-    }
+//    public User(List list) {
+//        this.username = (String) list.get(0);
+//        this.mobile = (String) list.get(1);
+//        this.workNumber = list.get(2).toString();
+//        this.formOfEmployment = ((Double) list.get(3)).intValue();
+//        this.timeOfEntry = (Date) list.get(4);
+//        this.departmentId = (String) list.get(5);
+//    }
 
     /**
      * ID
@@ -115,6 +115,9 @@ public class User implements Serializable {
      * user: 普通用户需要分配角色
      */
     private String level;
+
+//采用  dataurl 存储图片数据字段
+    private  String staffPhoto;
 
     /**
      * @JsonIgnore 忽略转换为json  避免多对多对象中转换的死循环

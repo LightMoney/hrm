@@ -5,6 +5,9 @@ hrm_company        企业模块          springboot
 hrm_system       系统模块            springboot
 ihrm_employee    员工模块            springboot    有员工百万导入导出功能
 
+
+sql 是从mysql  8.0版本上导出的 加载到低版本需要修改
+
 realm 写了两个  公共负责授权
 用户的负责认证   若两个写在同一个中  其他微服务，认证读取的用户信息无法获取
 

@@ -4,11 +4,13 @@ package cn.fan.user.service;
 import cn.fan.domain.company.Department;
 import cn.fan.domain.system.Role;
 import cn.fan.domain.system.User;
+import cn.fan.service.BaseService;
 import cn.fan.user.client.DepatmentFeign;
 import cn.fan.user.dao.RoleDao;
 import cn.fan.user.dao.UserDao;
 import cn.fan.util.IdWorker;
 import cn.fan.util.OnlyIdUtil;
+import com.sun.org.apache.xml.internal.security.utils.Base64;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,16 +20,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.io.IOException;
 import java.lang.annotation.Target;
 import java.util.*;
 
 @Service
-public class UserService {
+public class UserService  extends BaseService {
 
     @Autowired
     private UserDao userDao;
@@ -104,6 +108,9 @@ public class UserService {
         return userDao.findById(id).get();
     }
 
+    public List<User> findAll(String companyId) {
+        return userDao.findAll(super.getSpec(companyId));
+    }
     /**
      * 4.查询全部用户列表
      * 参数：map集合的形式
@@ -168,5 +175,25 @@ public class UserService {
         user.setRoles(roles);
         userDao.save(user);
 
+    }
+
+
+    /**
+     * 完成图片处理
+     * @param id        ：用户id
+     * @param file      ：用户上传的头像文件
+     * @return          ：请求路径
+     */
+    public String uploadImage(String id, MultipartFile file) throws IOException {
+        //1.根据id查询用户
+        User user = userDao.findById(id).get();
+        //2.使用DataURL的形式存储图片（对图片byte数组进行base64编码）
+        String encode = "data:image/png;base64,"+ Base64.encode(file.getBytes());
+//        System.out.println(encode);
+        //3.更新用户头像地址
+        user.setStaffPhoto(encode);
+        userDao.save(user);
+        //4.返回
+        return encode;
     }
 }

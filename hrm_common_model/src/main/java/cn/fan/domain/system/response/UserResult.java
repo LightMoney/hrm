@@ -90,10 +90,13 @@ public class UserResult implements Serializable {
 
     private String departmentName;
 
+    //采用  dataurl 存储图片数据字段
+    private String staffPhoto;
+
     private List<String> roleIds = new ArrayList<>();
 
     public UserResult(User user) {
-        BeanUtils.copyProperties(user,this);
+        BeanUtils.copyProperties(user, this);
         for (Role role : user.getRoles()) {
             this.roleIds.add(role.getId());
         }
