@@ -1,6 +1,7 @@
 package cn.fan.user.web;
 
 import cn.fan.controller.BaseController;
+import cn.fan.copy.PrincipalThreadlocal;
 import cn.fan.domain.system.Permission;
 import cn.fan.domain.system.Role;
 import cn.fan.domain.system.User;
@@ -258,13 +259,33 @@ public class UserController extends BaseController {
 //            users.add(new User(objects));
 //        }
 //        userService.saveAll(users, companyId, companyName);
-        UserDataListener<User> userUserDataListener = new UserDataListener<User>( importTaskExcutor);
-        EasyExcel.read(attachment.getInputStream(), User.class, userUserDataListener).sheet().doRead();
+//        UserDataListener<User> userUserDataListener = new UserDataListener<User>( importTaskExcutor);
+        UserDataListener<User> userUserDataListener = new UserDataListener<User>();
+        List<User> users = EasyExcel.read(attachment.getInputStream(), User.class, userUserDataListener).sheet().doReadSync();
+        System.out.println(watch.getTotalTimeSeconds());
+        execute(users);
         watch.stop();
         System.out.println(watch.getTotalTimeSeconds());
         return new Result(ResultCode.SUCCESS);
     }
 
+    public void execute(List<User> templates) {
+        int size = templates.size();
+        int start = 0;
+        int end = start + 1000;
+        HashMap content = PrincipalThreadlocal.getContent();
+        String companyId = (String) content.get("companyId");
+        String companyName = (String) content.get("companyName");
+        while (start < size) {
+            if (end > size) {
+                end = size;
+            }
+            List<User> users = templates.subList(start, end);
+            importTaskExcutor.doTaskTest( users,companyId,companyName);
+            start = end;
+            end = start + 1000;
+        }
+    }
     public static Object getCellValue(Cell cell) {
         //1.获取到单元格的属性类型
 //        poi 4.0  getCellType()

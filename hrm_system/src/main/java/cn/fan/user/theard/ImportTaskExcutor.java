@@ -19,7 +19,8 @@ import java.util.concurrent.ThreadPoolExecutor;
  *
  * @Async注解 开启该方法为多线程的异步调用（但线程会重复创建，故和线程池配合使用提升性能ThreadPoolTaskExecutor）
  * 还需要在@SpringBootApplication启动类或者@configure注解类上
- * 添加注解@EnableAsync启动多线程注解
+ *
+ * 添加      注解@EnableAsync      启动多线程注解
  */
 @Slf4j
 @Component//方法一定要交给spring管理
@@ -47,7 +48,7 @@ public class ImportTaskExcutor {
         int threadCount = Runtime.getRuntime().availableProcessors();//获取到服务器的cpu内核
         executor.setCorePoolSize(threadCount);//核心池大小（实际中通过自定义设置）
         executor.setMaxPoolSize(threadCount);//最大线程数（实际中通过自定义设置）
-        executor.setQueueCapacity(1000);//队列程度
+        executor.setQueueCapacity(100);//队列程度
         executor.setKeepAliveSeconds(1000);//线程存活空闲时间
         executor.setThreadNamePrefix("tsak-asyn");//线程前缀名称
         //等待任务在关机时完成--表明等待所有线程执行完

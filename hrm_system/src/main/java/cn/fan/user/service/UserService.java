@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StopWatch;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -43,6 +44,8 @@ public class UserService {
 
     @Transactional
     public void saveAll(List<User> users, String companyId, String companyName) {
+        StopWatch watch = new StopWatch();
+        watch.start();
         for (User user : users) {
             user.setId(OnlyIdUtil.generate("U"));
             user.setCompanyId(companyId);
@@ -51,13 +54,17 @@ public class UserService {
             user.setInServiceStatus(1);
             user.setLevel("user");
             user.setPassword("123456");//这里没加密哦
-            Department deptByCode = feign.findDeptByCode(user.getDepartmentId(), companyId);
-            if (deptByCode != null) {
-                user.setDepartmentId(deptByCode.getId());
-                user.setDepartmentName(deptByCode.getName());
-            }
+//            循环中调用 对性能影响很大，且数据超过2万会报连接被占用异常
+//            Department deptByCode = feign.findDeptByCode(user.getDepartmentId(), companyId);
+//            if (deptByCode != null) {
+//                user.setDepartmentId(deptByCode.getId());
+//                user.setDepartmentName(deptByCode.getName());
+//            }
             userDao.save(user);
+
         }
+        watch.stop();
+        System.out.println("1000次时间："+ watch.getTotalTimeSeconds());
     }
 
     /**

@@ -14,7 +14,7 @@ spring:
     password: root
   jpa:
     database: MySQL
-    show-sql: true
+#    show-sql: true
     open-in-view: true
   redis:
     host: 127.0.0.1

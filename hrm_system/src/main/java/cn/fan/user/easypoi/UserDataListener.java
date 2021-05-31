@@ -46,11 +46,11 @@ public class UserDataListener<T> extends AnalysisEventListener<T> {
 //     * @param demoDAO
 //     */
 
-    public UserDataListener(ImportTaskExcutor importTaskExcutor) {
-        this.importTaskExcutor = importTaskExcutor;
-    }
-
-    private ImportTaskExcutor importTaskExcutor;
+//    public UserDataListener(ImportTaskExcutor importTaskExcutor) {
+//        this.importTaskExcutor = importTaskExcutor;
+//    }
+//
+//    private ImportTaskExcutor importTaskExcutor;
     /**
      * 这个每一条数据解析都会来调用
      *
@@ -63,14 +63,14 @@ public class UserDataListener<T> extends AnalysisEventListener<T> {
 
         list.add(data);
         // 达到BATCH_COUNT了，需要去存储一次数据库，防止数据几万条数据在内存，容易OOM
-        if (list.size() >= BATCH_COUNT) {
-            HashMap content = PrincipalThreadlocal.getContent();
-            String companyId = (String)content.get("companyId");
-            String companyName = (String) content.get("companyName");
-            importTaskExcutor.doTaskTest((List<User>) list,companyId,companyName);
-            // 存储完成清理 list
-            list.clear();
-        }
+//        if (list.size() >= BATCH_COUNT) {
+//            HashMap content = PrincipalThreadlocal.getContent();
+//            String companyId = (String)content.get("companyId");
+//            String companyName = (String) content.get("companyName");
+//            importTaskExcutor.doTaskTest((List<User>) list,companyId,companyName);
+//            // 存储完成清理 list
+//            list.clear();
+//        }
     }
     /**
      * 所有数据解析完成了 都会来调用
