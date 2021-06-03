@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.ihrm.employee.service.*;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jasperreports.engine.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -52,6 +53,43 @@ public class EmployeeController extends BaseController {
     @Autowired
     private ArchiveService archiveService;
 
+    /**
+     * pdf下载
+     *
+     * @param uid
+     * @throws Exception
+     */
+    @GetMapping(value = "/pdf/{id}")
+    public void pdf(@PathVariable(name = "id") String uid) throws Exception {
+        ServletOutputStream os = response.getOutputStream();
+        //1.引入使用工具建好的jasper 文件
+        Resource classPathResource = new ClassPathResource("template/profile.jasper");
+        FileInputStream inputStream = new FileInputStream(classPathResource.getFile());
+//        2.创建jasperPrint，向jasper 中填充数据
+        try {
+            HashMap<String, Object> map = new HashMap<>();
+//用户详情
+            UserCompanyPersonal per = userCompanyPersonalService.findById(uid);
+//        用户岗位
+            UserCompanyJobs job = userCompanyJobsService.findById(uid);
+//            头像地址    没有用云存储就没写
+            String staffPhoto = "";
+            map.put("staffPhoto",staffPhoto);
+            Map<String, Object> map1 = BeanMapUtils.beanToMap(per);
+            Map<String, Object> map2 = BeanMapUtils.beanToMap(job);
+            map.putAll(map1);
+            map.putAll(map2);
+            JasperPrint print = JasperFillManager.fillReport(inputStream, map, new JREmptyDataSource());
+//            3.将 jasperPrint 输出 为pdf
+            JasperExportManager.exportReportToPdfStream(print, os);
+        } catch (JRException e) {
+            e.printStackTrace();
+        } finally {
+            os.flush();
+            os.close();
+        }
+    }
+
 
     /**
      * 员工个人信息保存
@@ -74,11 +112,11 @@ public class EmployeeController extends BaseController {
     @RequestMapping(value = "/{id}/personalInfo", method = RequestMethod.GET)
     public Result findPersonalInfo(@PathVariable(name = "id") String uid) throws Exception {
         UserCompanyPersonal info = userCompanyPersonalService.findById(uid);
-        if(info == null) {
+        if (info == null) {
             info = new UserCompanyPersonal();
             info.setUserId(uid);
         }
-        return new Result(ResultCode.SUCCESS,info);
+        return new Result(ResultCode.SUCCESS, info);
     }
 
     /**
@@ -102,12 +140,12 @@ public class EmployeeController extends BaseController {
     @RequestMapping(value = "/{id}/jobs", method = RequestMethod.GET)
     public Result findJobsInfo(@PathVariable(name = "id") String uid) throws Exception {
         UserCompanyJobs info = userCompanyJobsService.findById(uid);
-        if(info == null) {
+        if (info == null) {
             info = new UserCompanyJobs();
             info.setUserId(uid);
             info.setCompanyId(companyId);
         }
-        return new Result(ResultCode.SUCCESS,info);
+        return new Result(ResultCode.SUCCESS, info);
     }
 
     /**
@@ -126,11 +164,11 @@ public class EmployeeController extends BaseController {
     @RequestMapping(value = "/{id}/leave", method = RequestMethod.GET)
     public Result findLeave(@PathVariable(name = "id") String uid) throws Exception {
         EmployeeResignation resignation = resignationService.findById(uid);
-        if(resignation == null) {
+        if (resignation == null) {
             resignation = new EmployeeResignation();
             resignation.setUserId(uid);
         }
-        return new Result(ResultCode.SUCCESS,resignation);
+        return new Result(ResultCode.SUCCESS, resignation);
     }
 
 
@@ -150,11 +188,11 @@ public class EmployeeController extends BaseController {
     @RequestMapping(value = "/{id}/transferPosition", method = RequestMethod.GET)
     public Result findTransferPosition(@PathVariable(name = "id") String uid) throws Exception {
         UserCompanyJobs jobsInfo = userCompanyJobsService.findById(uid);
-        if(jobsInfo == null) {
+        if (jobsInfo == null) {
             jobsInfo = new UserCompanyJobs();
             jobsInfo.setUserId(uid);
         }
-        return new Result(ResultCode.SUCCESS,jobsInfo);
+        return new Result(ResultCode.SUCCESS, jobsInfo);
     }
 
     /**
@@ -172,11 +210,11 @@ public class EmployeeController extends BaseController {
     @RequestMapping(value = "/{id}/positive", method = RequestMethod.GET)
     public Result findPositive(@PathVariable(name = "id") String uid) throws Exception {
         EmployeePositive positive = positiveService.findById(uid);
-        if(positive == null) {
+        if (positive == null) {
             positive = new EmployeePositive();
             positive.setUserId(uid);
         }
-        return new Result(ResultCode.SUCCESS,positive);
+        return new Result(ResultCode.SUCCESS, positive);
     }
 
     /**
@@ -201,22 +239,22 @@ public class EmployeeController extends BaseController {
     @RequestMapping(value = "/archives", method = RequestMethod.GET)
     public Result findArchives(@RequestParam(name = "pagesize") Integer pagesize, @RequestParam(name = "page") Integer page, @RequestParam(name = "year") String year) throws Exception {
         Map map = new HashMap();
-        map.put("year",year);
-        map.put("companyId",companyId);
+        map.put("year", year);
+        map.put("companyId", companyId);
         Page<EmployeeArchive> searchPage = archiveService.findSearch(map, page, pagesize);
-        PageResult<EmployeeArchive> pr = new PageResult(searchPage.getTotalElements(),searchPage.getContent());
-        return new Result(ResultCode.SUCCESS,pr);
+        PageResult<EmployeeArchive> pr = new PageResult(searchPage.getTotalElements(), searchPage.getContent());
+        return new Result(ResultCode.SUCCESS, pr);
     }
 
     /**
      * 当月人事报表导出
-     *  参数：
-     *      年月-月（2018-02%）
+     * 参数：
+     * 年月-月（2018-02%）
      */
     @RequestMapping(value = "/export/{month}", method = RequestMethod.GET)
     public void export(@PathVariable String month) throws Exception {
         //1.获取报表数据
-        List<EmployeeReportResult> list = userCompanyPersonalService.findByReport(companyId,month);
+        List<EmployeeReportResult> list = userCompanyPersonalService.findByReport(companyId, month);
         //2.构造Excel
         //创建工作簿
         //SXSSFWorkbook : 百万数据报表
@@ -226,19 +264,19 @@ public class EmployeeController extends BaseController {
         Sheet sheet = wb.createSheet();
         //创建行
         //标题
-        String [] titles = "编号,姓名,手机,最高学历,国家地区,护照号,籍贯,生日,属相,入职时间,离职类型,离职原因,离职时间".split(",");
+        String[] titles = "编号,姓名,手机,最高学历,国家地区,护照号,籍贯,生日,属相,入职时间,离职类型,离职原因,离职时间".split(",");
         //处理标题
 
         Row row = sheet.createRow(0);
 
-        int titleIndex=0;
+        int titleIndex = 0;
         for (String title : titles) {
             Cell cell = row.createCell(titleIndex++);
             cell.setCellValue(title);
         }
 
         int rowIndex = 1;
-        Cell cell=null;
+        Cell cell = null;
 //        for(int i=0;i<10000;i++){
         for (EmployeeReportResult employeeReportResult : list) {
             row = sheet.createRow(rowIndex++);
@@ -288,7 +326,7 @@ public class EmployeeController extends BaseController {
         wb.write(os);
 
 
-        new DownloadUtils().download(os,response,month+"人事报表.xlsx");
+        new DownloadUtils().download(os, response, month + "人事报表.xlsx");
     }
 
     /**
